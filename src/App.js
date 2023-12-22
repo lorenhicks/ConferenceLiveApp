@@ -1,10 +1,12 @@
 import './App.css';
-import AppMenu from './components/AppBar';
+import Appbar from './components/AppBar';
+import Attendee from './components/Attendee';
 
 function App() {
   return (
     <div className="App">
-      <AppMenu/>
+      <Appbar/>
+      <Attendee />
     </div>
   );
 }
