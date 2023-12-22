@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
@@ -8,8 +8,10 @@ import Button from '@material-ui/core/Button';
 
 export default function Attendee() {
     const paperStyle = { padding: '50px 20px', width: 600, margin: '20px auto' }
+    const headerStyle = { color: "#005EB8", "text-shadow": "-.5px .5px 1px rgba(20, 20, 20, 0.5)" }
     const [name, setName] = useState('')
     const [company, setCompany] = useState('')
+    const [attendees, setAttendees] = useState([])
     const handleClick = (e) => {
         e.preventDefault()
         const attendee = { name, company }
@@ -22,11 +24,16 @@ export default function Attendee() {
             console.log('Speaker has checked in to Conference Hall A.')
         })
     }
-    const headerStyle =
-    {
-        color: "#005EB8",
-        "text-shadow": "-.5px .5px 1px rgba(20, 20, 20, 0.5)"
-    }
+
+    useEffect(() => {
+        fetch("http://localhost:8080/attendee/getAll")
+            .then(res => res.json())
+            .then((result) => {
+                setAttendees(result);
+            }
+            )
+    }, [])
+
 
     return (
         <Container>
@@ -45,7 +52,16 @@ export default function Attendee() {
                     <Button onClick={handleClick} color="blue" style={{ color: "white", background: "#005EB8" }}>Check-In</Button>
 
                 </Box>
-                {name} {company}
+                <h1>Speakers</h1>
+                <Paper elevation={3} style={paperStyle}>
+                    {attendees.map(attendee => (
+                        <Paper elevation={6} style={{ margin: "10px", padding: "15px", textAlign: "left" }} key={attendee.id}>
+                            Employee ID: {attendee.id} <br />
+                            Name: {attendee.name} <br />
+                            Company: {attendee.company}
+                        </Paper>
+                    ))}
+                </Paper>
             </Paper>
         </Container>
     );
