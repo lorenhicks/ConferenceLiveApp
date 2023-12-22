@@ -10,10 +10,17 @@ export default function Attendee() {
     const paperStyle = { padding: '50px 20px', width: 600, margin: '20px auto' }
     const [name, setName] = useState('')
     const [company, setCompany] = useState('')
-    const handleClick=(e)=> {
+    const handleClick = (e) => {
         e.preventDefault()
-        const attendee={name,company}
+        const attendee = { name, company }
         console.log(attendee)
+        fetch("http://localhost:8080/attendee/add", {
+            method: "POST",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify(attendee)
+        }).then(() => {
+            console.log('Speaker has checked in to Conference Hall A.')
+        })
     }
     const headerStyle =
     {
@@ -35,7 +42,7 @@ export default function Attendee() {
                 >
                     <TextField id="outlined-basic" label="Attendee Name" variant="outlined" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
                     <TextField id="outlined-basic" style={{ marginTop: "10px", marginBottom: "10px" }} label="Attendee Company" variant="outlined" value={company} onChange={(e) => setCompany(e.target.value)} fullWidth />
-                    <Button onClick={handleClick} color="blue" style={{ color: "white", background: "#005EB8"}}>Check-In</Button>
+                    <Button onClick={handleClick} color="blue" style={{ color: "white", background: "#005EB8" }}>Check-In</Button>
 
                 </Box>
                 {name} {company}
